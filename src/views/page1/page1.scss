@@ -1,0 +1,25 @@
+img{
+    width: 800px;
+    height: auto;
+}
+
+.bgtest{
+    width: 800px;
+    height: 600px;
+    background-image: url('../assets/desktop.png');
+}
+
+.floatimage{
+    float: right;
+    max-width: 40%;
+    overflow: hidden;
+    border-radius: 50%;
+    img{
+        width: 100%;
+        height: auto;
+    }
+}
+
+.testautofix{
+    column-count: 3;
+}

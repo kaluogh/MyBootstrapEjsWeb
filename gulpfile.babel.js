@@ -1,13 +1,3 @@
-// import less from 'gulp-less';
-// import babel from 'gulp-babel';
-// import concat from 'gulp-concat';
-// import uglify from 'gulp-uglify';
-// import cleanCSS from 'gulp-clean-css';
-
-// import gulp from 'gulp';
-// import rename from 'gulp-rename';
-// import del from 'del';
-// import ejs from 'gulp-ejs';
 const gulp = require ('gulp');
 const rename = require ('gulp-rename');
 const del = require ('del');
@@ -15,7 +5,12 @@ const ejs = require ('gulp-ejs');
 const { development, production } = require('gulp-environments');
 const minifyHtml = require('gulp-minify-html');
 const concat = require('gulp-concat');
+const babel = require('gulp-babel');
+const uglify = require('gulp-uglify');
 const sourcemaps = require('gulp-sourcemaps');
+const sass = require('gulp-sass');
+const autoprefixer = require('gulp-autoprefixer');
+const cssmin = require('gulp-cssmin');
 
 const path = require('path');
 const PATH_dist = 'dist'
@@ -51,6 +46,10 @@ function G_assets(){
 
 function G_js(){
   return gulp.src(PATH_js)
+    .pipe(production(babel({
+      presets: ['@babel/env']
+    })))
+    .pipe(production(uglify()))
     .pipe(rename(function(tempPath){
       tempPath.dirname = './';
     }))
@@ -59,6 +58,11 @@ function G_js(){
 
 function  G_scss() {
   return gulp.src(PATH_scss)
+    .pipe(development(sourcemaps.init()))
+    .pipe(sass().on('error', sass.logError))
+    .pipe(autoprefixer())
+    .pipe(development(sourcemaps.write()))
+    .pipe(production(cssmin()))
     .pipe(rename(function(tempPath){
       tempPath.dirname = './';
     }))
@@ -75,63 +79,27 @@ function G_appjs() {
         .pipe(gulp.dest(path.join(PATH_dist, 'js')));
 }
 
-const G_test = gulp.series( development.task, G_clean, gulp.parallel(G_assets, G_html, G_js, G_scss, G_appjs));
-const G_test2 = gulp.series( production.task, G_clean, gulp.parallel(G_assets, G_html, G_js, G_scss, G_appjs));
+function G_appscss() {
+  let sassOptions = {
+    errLogToConsole: true,
+    outputStyle: 'expanded',
+    includePaths: path.join(PATH_node_modules,'bootstrap', 'scss')
+  }
+  return gulp.src('src/global/scss/app.scss')
+    .pipe(development(sourcemaps.init()))
+    .pipe(sass(sassOptions).on('error', sass.logError))
+    // .pipe(autoprefixer())
+    .pipe(development(sourcemaps.write()))
+    .pipe(production(cssmin()))
+    .pipe(rename(function(tempPath){
+      tempPath.dirname = './';
+    }))
+    .pipe(gulp.dest(PATH_DEST_scss))
+}
 
-// G_html()
-// exports.clean = clean
-export { G_clean, G_html, G_assets, G_js, G_scss, G_appjs, G_test, G_test2}
- 
-// const paths = {
-//   styles: {
-//     src: 'src/styles/**/*.less',
-//     dest: 'assets/styles/'
-//   },
-//   scripts: {
-//     src: 'src/scripts/**/*.js',
-//     dest: 'assets/scripts/'
-//   }
-// };
- 
-/*
- * For small tasks you can export arrow functions
- */
-// export const clean = () => del([ 'assets' ]);
- 
-/*
- * You can also declare named functions and export them as tasks
- */
-// export function styles() {
-//   return gulp.src(paths.styles.src)
-//     .pipe(less())
-//     .pipe(cleanCSS())
-//     // pass in options to the stream
-//     .pipe(rename({
-//       basename: 'main',
-//       suffix: '.min'
-//     }))
-//     .pipe(gulp.dest(paths.styles.dest));
-// }
- 
-// export function scripts() {
-//   return gulp.src(paths.scripts.src, { sourcemaps: true })
-//     .pipe(babel())
-//     .pipe(uglify())
-//     .pipe(concat('main.min.js'))
-//     .pipe(gulp.dest(paths.scripts.dest));
-// }
- 
- /*
-  * You could even use `export as` to rename exported tasks
-  */
-// function watchFiles() {
-//   gulp.watch(paths.scripts.src, scripts);
-//   gulp.watch(paths.styles.src, styles);
-// }
-// export { watchFiles as watch };
- 
-// const build = gulp.series(clean, gulp.parallel(styles, scripts));
-/*
- * Export a default task
- */
-// export default build;
+
+const dev = gulp.series( development.task, G_clean, gulp.parallel(G_assets, G_html, G_js, G_scss, G_appjs, G_appscss));
+const pro = gulp.series( production.task, G_clean, gulp.parallel(G_assets, G_html, G_js, G_scss, G_appjs, G_appscss));
+
+export default dev
+export { G_clean, G_html, G_assets, G_js, G_scss, G_appjs, G_appscss, dev, pro}

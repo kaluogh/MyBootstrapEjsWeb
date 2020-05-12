@@ -1,1 +1,2 @@
-console.log('index.js')
+let test = 'index.js'
+console.log(test)
