@@ -11,6 +11,8 @@ const sourcemaps = require('gulp-sourcemaps');
 const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
 const cssmin = require('gulp-cssmin');
+const browserSync = require('browser-sync');
+const server = browserSync.create();
 
 const path = require('path');
 const PATH_dist = 'dist'
@@ -97,9 +99,55 @@ function G_appscss() {
     .pipe(gulp.dest(PATH_DEST_scss))
 }
 
+function G_copy_js() {
+  let swiperJsPath = path.join(PATH_node_modules,'swiper','js','swiper.min.js');
+    return gulp.src([swiperJsPath])
+        .pipe(rename(function(tempPath){
+            tempPath.dirname = './';
+        }))
+        .pipe(gulp.dest(PATH_DEST_js));
+}
+function G_copy_css() {
+  let swiperCssPath = path.join(PATH_node_modules,'swiper','css','swiper.min.css');
+    return gulp.src([swiperCssPath])
+        .pipe(rename(function(tempPath){
+            tempPath.dirname = './';
+        }))
+        .pipe(gulp.dest(PATH_DEST_scss));
+}
 
-const dev = gulp.series( development.task, G_clean, gulp.parallel(G_assets, G_html, G_js, G_scss, G_appjs, G_appscss));
-const pro = gulp.series( production.task, G_clean, gulp.parallel(G_assets, G_html, G_js, G_scss, G_appjs, G_appscss));
+function G_reload(done) {
+  server.reload();
+  done();
+}
+
+function G_server(done) {
+  server.init({
+    server: {
+      baseDir: PATH_dist,
+    },
+    port: 6081
+  });
+  done();
+}
+
+function G_watch() {
+  // gulp.watch(PATH_DEST_assets, gulp.series(G_assets, G_reload));
+  gulp.watch([PATH_html,'src/templates/*.ejs'], gulp.series(G_html, G_reload));
+  gulp.watch(PATH_js, gulp.series(G_js, G_reload));
+  gulp.watch('src/global/js/app.js', gulp.series(G_appjs, G_reload));
+  gulp.watch(PATH_scss, gulp.series(G_scss, G_reload));
+  gulp.watch('src/global/scss/app.scss', gulp.series(G_appscss, G_reload));
+}
+
+const dev = gulp.series( 
+  development.task, G_clean, 
+  gulp.parallel(G_assets, G_html, G_js, G_scss, G_appjs, G_appscss, G_copy_js, G_copy_css), 
+  G_server, G_watch);
+const pro = gulp.series( 
+  production.task, G_clean, 
+  gulp.parallel(G_assets, G_html, G_js, G_scss, G_appjs, G_appscss, G_copy_js, G_copy_css), 
+  G_server, G_watch);
 
 export default dev
-export { G_clean, G_html, G_assets, G_js, G_scss, G_appjs, G_appscss, dev, pro}
+// export { G_clean, G_html, G_assets, G_js, G_scss, G_appjs, G_appscss, dev, pro}

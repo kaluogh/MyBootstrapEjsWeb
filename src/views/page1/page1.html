@@ -1,6 +1,11 @@
-<%- include('../../templates/head', { page: 'page1', title: 'page1 Page'}) %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../templates/head', { page: 'page1', title: 'page1'}) %>
+  <link rel="stylesheet" href="./css/header.css">
+</head>
 <body>
-    <h3>Index.html</h3>
+    <h3>page1.html</h3>
     
     <div>123114</div>
     <div>
@@ -18,5 +23,7 @@
     <div class="testautofix">
         Vivamus suscipit tortor eget felis porttitor volutpat. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Nulla porttitor accumsan tincidunt. Vivamus suscipit tortor eget felis porttitor volutpat. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus.
     </div>
+    
+    <%- include('../../templates/foot', { page: 'page1'}) %>
 </body>
-<%- include('../../templates/foot') %>
+</html>

@@ -12,6 +12,7 @@
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "@babel/register": "^7.9.0",
+    "browser-sync": "^2.26.7",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.1",
@@ -30,6 +31,7 @@
   "dependencies": {
     "bootstrap": "4.4.1",
     "jquery": "3.4.1",
-    "popper.js": "1.16.0"
+    "popper.js": "1.16.0",
+    "swiper": "^5.3.8"
   }
 }
