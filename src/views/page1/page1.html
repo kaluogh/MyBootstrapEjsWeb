@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <%- include('../../templates/head', { page: 'page1', title: 'page1'}) %>
-  <link rel="stylesheet" href="./css/header.css">
 </head>
 <body>
     <h3>page1.html</h3>
@@ -24,6 +23,7 @@
         Vivamus suscipit tortor eget felis porttitor volutpat. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Nulla porttitor accumsan tincidunt. Vivamus suscipit tortor eget felis porttitor volutpat. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus.
     </div>
     
-    <%- include('../../templates/foot', { page: 'page1'}) %>
+    <%- include('../../templates/htmlfooter', { page: 'page1', title: 'page1'}) %>
+    <%- include('../../templates/foot', { page: 'page1', title: 'page1'}) %>
 </body>
 </html>

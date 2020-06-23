@@ -4,7 +4,7 @@
   <%- include('../../templates/head', { page: 'index', title: 'Index Page'}) %>
 </head>
 <body>
-    <%- include('../../templates/header', { page: 'index', title: 'Index Page'}) %>
+    <%- include('../../templates/htmlheader', { page: 'index', title: 'Index Page'}) %>
     <h3>Index.html</h3>
         
     <a href="./page1.html">page1</a>
@@ -76,6 +76,7 @@
       </div>
     </div>
 
+    <%- include('../../templates/htmlfooter', { page: 'index', title: 'Index Page'}) %>
     <%- include('../../templates/foot', { page: 'index', title: 'Index Page'}) %>
   </body>
 </html>
