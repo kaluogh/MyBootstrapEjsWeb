@@ -150,5 +150,4 @@ const pro = gulp.series(
   G_server, G_watch);
 
 export default dev
-export {pro}
-// export { G_clean, G_html, G_assets, G_js, G_scss, G_appjs, G_appscss, dev, pro}
+export { G_clean, G_html, G_assets, G_js, G_scss, G_appjs, G_appscss, dev, pro}
