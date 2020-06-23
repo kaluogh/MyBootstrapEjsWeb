@@ -1,7 +1,7 @@
 $(document).ready(function () {
     let test = 'page2.js'
     console.log(test)
-    var mySwiper = new Swiper ('.swiper-container', {
+    const mySwiper = new Swiper ('.swiper-container', {
         // direction: 'vertical',
         loop: true,
 
